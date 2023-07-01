@@ -15,7 +15,7 @@
 			"installOhMyZsh": true,
 			"upgradePackages": true,
 		},
-		"ghcr.io/devcontainers/features/nvidia-cuda:1": {"cudaVersion": "11.8"},
+		//"ghcr.io/devcontainers/features/nvidia-cuda:1": {"cudaVersion": "11.8"},
 		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {},
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
@@ -23,7 +23,7 @@
 		"--init",
 		"--gpus",
 		"all",
-		"--network=host",
+		"--network=host",		
 		"-e",
 		"NVIDIA_DRIVER_CAPABILITIES=video,compute,utility",
 		"--ipc=host",
@@ -57,7 +57,8 @@
 				"ms-python.python",
 				"esbenp.prettier-vscode",				
 				"kevinrose.vsc-python-indent",
-				"visualstudioexptteam.vscodeintellicode"
+				"visualstudioexptteam.vscodeintellicode",
+				"humao.rest-client"
 			]
 		}
 	},

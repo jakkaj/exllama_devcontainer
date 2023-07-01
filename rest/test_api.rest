@@ -1,0 +1,6 @@
+POST http://host.docker.internal:6010/infer_creative HTTP/1.1
+Content-Type:  application/json
+
+{
+    "prompt": "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.\n\nUSER: What is the distance between the Earth and the Moon?\nASSISTANT:"
+}

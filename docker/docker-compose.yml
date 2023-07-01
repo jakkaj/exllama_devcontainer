@@ -1,0 +1,22 @@
+version: "3.9"
+name: exllama
+services:
+  exllama-api:    
+    image: exllama-api:latest
+    env_file:
+      - .env
+    volumes:
+      - ${MODEL_PATH}:/data/model     
+    ports:
+      - "${PORT}:$PORT"
+    tmpfs:
+      - /tmp   
+    
+    tty: true    
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

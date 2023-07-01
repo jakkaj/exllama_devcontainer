@@ -5,10 +5,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install eog wget -y && \
     rm -rf /var/lib/apt/lists/*
 
-COPY .devcontainer/install_cuda.sh /tmp/pip-tmp/
-RUN  /tmp/pip-tmp/install_cuda.sh
+#COPY .devcontainer/install_cuda.sh /tmp/pip-tmp/
+#RUN  /tmp/pip-tmp/install_cuda.sh
 
-RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+#
 
 COPY requirements.txt /tmp/pip-tmp/
 
