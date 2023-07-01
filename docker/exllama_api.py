@@ -1,8 +1,9 @@
 import os
 import glob
 import dotenv
+import json
 from urllib.parse import parse_qs
-
+from webob import Response
 from model import ExLlama, ExLlamaCache, ExLlamaConfig
 from flask import Flask, request
 from tokenizer import ExLlamaTokenizer
@@ -36,6 +37,23 @@ class ExLlamaService:
         self.app.route('/infer_sphinx', methods=['POST'])(self.infer_context_s)
         self.app.route('/infer', methods=['POST'])(self.infer_context_params)
     
+    
+
+    def get_response(self, outputs):
+        
+        # if ASSISTANT: is in the outputs then make outputs only the text after that
+        if "ASSISTANT:" in outputs:
+            outputs = outputs.split("ASSISTANT:")[1]
+        
+        
+        
+        
+        response_dict = {
+            "outputs": outputs
+        }
+        response_json = json.dumps(response_dict)
+        return response_json
+    
     def infer_context_params(self):
         query_string = request.query_string.decode('utf-8')
         query_params = parse_qs(query_string)
@@ -65,7 +83,9 @@ class ExLlamaService:
         self.generator.settings.typical = params['typical']
 
         outputs = self.generator.generate_simple(prompt, max_new_tokens=params['max_new_tokens'])
-        return outputs
+        output_json = self.get_response(outputs)
+        response = Response(json=output_json, content_type='application/json')
+        return response
 
     
     def infer_context_p(self):
@@ -80,7 +100,9 @@ class ExLlamaService:
         self.generator.settings.typical = 0.0
 
         outputs = self.generator.generate_simple(prompt, max_new_tokens=200)
-        return outputs
+        output_json = self.get_response(outputs)
+        response = Response(json=output_json, content_type='application/json')
+        return response
 
     def infer_context_c(self):
         data = request.json
@@ -94,7 +116,9 @@ class ExLlamaService:
         self.generator.settings.typical = 0.0
 
         outputs = self.generator.generate_simple(prompt, max_new_tokens=200)
-        return outputs
+        output_json = self.get_response(outputs)
+        response = Response(json=output_json, content_type='application/json')
+        return response
 
     def infer_context_s(self):
         data = request.json
@@ -108,7 +132,9 @@ class ExLlamaService:
         self.generator.settings.typical = 0.0
 
         outputs = self.generator.generate_simple(prompt, max_new_tokens=200)
-        return outputs
+        output_json = self.get_response(outputs)
+        response = Response(json=output_json, content_type='application/json')
+        return response
 
     def start(self, host="0.0.0.0", port=8004):
         print(f"Starting server on address {host}:{port}")
