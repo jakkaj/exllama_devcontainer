@@ -1,6 +1,8 @@
 import os
 import glob
 import dotenv
+from urllib.parse import parse_qs
+
 from model import ExLlama, ExLlamaCache, ExLlamaConfig
 from flask import Flask, request
 from tokenizer import ExLlamaTokenizer
@@ -32,7 +34,40 @@ class ExLlamaService:
         self.app.route('/infer_precise', methods=['POST'])(self.infer_context_p)
         self.app.route('/infer_creative', methods=['POST'])(self.infer_context_c)
         self.app.route('/infer_sphinx', methods=['POST'])(self.infer_context_s)
+        self.app.route('/infer', methods=['POST'])(self.infer_context_params)
+    
+    def infer_context_params(self):
+        query_string = request.query_string.decode('utf-8')
+        query_params = parse_qs(query_string)
+        
+        data = request.json
+        prompt = data.get('prompt')
 
+        params = {
+            'token_repetition_penalty_max': float(query_params.get('token_repetition_penalty_max', '1.176')[0]),
+            'token_repetition_penalty_sustain': int(query_params.get('token_repetition_penalty_sustain', str(self.config.max_seq_len))[0]),
+            'temperature': float(query_params.get('temperature', ['0.7'])[0]),
+            'top_p': float(query_params.get('top_p', ['0.1'])[0]),
+            'top_k': int(query_params.get('top_k', ['40'])[0]),
+            'typical': float(query_params.get('typical', ['0.0'])[0]),
+            'max_new_tokens': int(query_params.get('max_new_tokens', ['200'])[0])
+        }
+        
+        print("Parameters:")
+        for key, value in params.items():
+            print(f"{key}: {value}")
+            
+        self.generator.settings.token_repetition_penalty_max = params['token_repetition_penalty_max']
+        self.generator.settings.token_repetition_penalty_sustain = params['token_repetition_penalty_sustain']
+        self.generator.settings.temperature = params['temperature']
+        self.generator.settings.top_p = params['top_p']
+        self.generator.settings.top_k = params['top_k']
+        self.generator.settings.typical = params['typical']
+
+        outputs = self.generator.generate_simple(prompt, max_new_tokens=params['max_new_tokens'])
+        return outputs
+
+    
     def infer_context_p(self):
         data = request.json
         prompt = data.get('prompt')
