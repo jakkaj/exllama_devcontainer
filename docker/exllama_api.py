@@ -39,20 +39,27 @@ class ExLlamaService:
     
     
 
-    def get_response(self, outputs):
+    def get_response(self, outputs, prompt):
         
-        # if ASSISTANT: is in the outputs then make outputs only the text after that
-        if "ASSISTANT:" in outputs:
-            outputs = outputs.split("ASSISTANT:")[1]
+        # # if ASSISTANT: is in the outputs then make outputs only the text after that
+        # if "ASSISTANT:" in outputs:
+        #     outputs = outputs.split("ASSISTANT:")[1]
         
-        
-        
+        # for s in stop:
+        #     print(f"Checking for stop sequence: {s}")
+        #     if s in outputs:
+        #         print(f"Found stop sequence: {s}")
+        #         outputs = outputs.split(s)[0]                
+            
+        # # if prompt in outputs then remove it
+        # if prompt in outputs:
+        #     outputs = outputs.split(prompt)[1]
         
         response_dict = {
-            "outputs": outputs
+            "results": [{"text": outputs}]
         }
         response_json = json.dumps(response_dict)
-        return response_json
+        return response_dict
     
     def infer_context_params(self):
         query_string = request.query_string.decode('utf-8')
@@ -62,18 +69,25 @@ class ExLlamaService:
         prompt = data.get('prompt')
 
         params = {
-            'token_repetition_penalty_max': float(query_params.get('token_repetition_penalty_max', '1.176')[0]),
-            'token_repetition_penalty_sustain': int(query_params.get('token_repetition_penalty_sustain', str(self.config.max_seq_len))[0]),
-            'temperature': float(query_params.get('temperature', ['0.7'])[0]),
-            'top_p': float(query_params.get('top_p', ['0.1'])[0]),
-            'top_k': int(query_params.get('top_k', ['40'])[0]),
-            'typical': float(query_params.get('typical', ['0.0'])[0]),
-            'max_new_tokens': int(query_params.get('max_new_tokens', ['200'])[0])
+            'token_repetition_penalty_max': float(data.get('token_repetition_penalty_max', query_params.get('token_repetition_penalty_max', ['1.176'])[0])),
+            'token_repetition_penalty_sustain': int(data.get('token_repetition_penalty_sustain', query_params.get('token_repetition_penalty_sustain', [str(self.config.max_seq_len)])[0])),
+            'temperature': float(data.get('temperature', query_params.get('temperature', ['0.7'])[0])),
+            'top_p': float(data.get('top_p', query_params.get('top_p', ['0.1'])[0])),
+            'top_k': int(data.get('top_k', query_params.get('top_k', ['40'])[0])),
+            'typical': float(data.get('typical', query_params.get('typical', ['0.0'])[0])),
+            'max_new_tokens': int(data.get('max_new_tokens', query_params.get('max_new_tokens', ['200'])[0]))
         }
         
-        print("Parameters:")
-        for key, value in params.items():
-            print(f"{key}: {value}")
+        # stop = data.get("stop_sequence")
+        # if stop is not None:
+        #     print(f"Stop sequence: {stop}")
+        #     setattr(self.generator.settings, "stop_sequences", stop)
+        
+        # print("Parameters:")
+        # for key, value in params.items():
+        #     print(f"{key}: {value}")
+        
+        print(f"--------------\n{prompt}\n--------------")
             
         self.generator.settings.token_repetition_penalty_max = params['token_repetition_penalty_max']
         self.generator.settings.token_repetition_penalty_sustain = params['token_repetition_penalty_sustain']
@@ -81,9 +95,10 @@ class ExLlamaService:
         self.generator.settings.top_p = params['top_p']
         self.generator.settings.top_k = params['top_k']
         self.generator.settings.typical = params['typical']
+        
 
         outputs = self.generator.generate_simple(prompt, max_new_tokens=params['max_new_tokens'])
-        output_json = self.get_response(outputs)
+        output_json = self.get_response(outputs, prompt)
         response = Response(json=output_json, content_type='application/json')
         return response
 
