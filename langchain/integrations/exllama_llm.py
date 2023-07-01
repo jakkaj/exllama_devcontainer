@@ -30,9 +30,9 @@ class ExLlamaApi(LLM):
     def _call(self, prompt: str, stop: Optional[List[str]]=None) -> str:        
         data = {
             'prompt': prompt,
-            'max_new_tokens': 2000,            
+            'max_new_tokens': 1500,            
             'temperature': .2,
-            'top_p': .2,
+            'top_p': 1,
             'top_k': 40,
             'typical': 0.0
         }
@@ -55,8 +55,8 @@ class ExLlamaApi(LLM):
         if 'results' in json_response and len(json_response['results']) > 0 and 'text' in json_response['results'][0]:
             # Return the generated text
             text = json_response['results'][0]['text'].strip().replace("'''", "```")
-            # if text.startswith(prompt):
-            #     text = text[len(prompt):].strip()
+            if text.startswith(prompt):
+                text = text[len(prompt):].strip()
             # Remove the stop sequence from the end of the text, if it's there
             if stop is not None:
                 for sequence in stop:

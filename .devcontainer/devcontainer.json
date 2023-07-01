@@ -15,7 +15,7 @@
 			"installOhMyZsh": true,
 			"upgradePackages": true,
 		},
-		//"ghcr.io/devcontainers/features/nvidia-cuda:1": {"cudaVersion": "11.8"},
+		// "ghcr.io/devcontainers/features/nvidia-cuda:1": {"cudaVersion": "11.8"},
 		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {},
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
@@ -64,6 +64,9 @@
 	},
 	"remoteEnv": {
 		"HOST_PROJECT_PATH": "${localWorkspaceFolder}",
+	},
+	"hostRequirements": {
+		"gpu": true
 	},
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	"remoteUser": "vscode",

@@ -1,5 +1,8 @@
 notebook
 pandas
+torch
+torchvision
+torchaudio
 python-dotenv
 requests
 openai
@@ -22,3 +25,9 @@ markdown
 markdown[extra]
 colored_traceback
 shell-gpt
+
+numpy
+torch>=2.0.1
+safetensors==0.3.1
+sentencepiece>=0.1.97
+ninja==1.11.1
