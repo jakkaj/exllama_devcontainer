@@ -36,7 +36,7 @@ from integrations.custom_output import CustomOutputParser
 from model import ExLlama, ExLlamaCache, ExLlamaConfig
 
 from langchain.memory import ConversationTokenBufferMemory
-
+from dotenv import load_dotenv
 # llm = Exllama()
 
 # tools = load_tools(["wikipedia", "llm-math"], llm=llm)
@@ -47,14 +47,21 @@ from langchain.memory import ConversationTokenBufferMemory
 # agent.run("### Instruction:\nIn what year was the film Departed with Leopnardo Dicaprio released? What is this year raised to the 0.43 power?\n### Response:\n")
 
 
+#load .env
+
+
+#load .env file
+load_dotenv()
+
 
 handler = BasicStreamingHandler()
 llm = Exllama(streaming = True,
               #model_path='/data/models/TheBloke_WizardLM-33B-V1.0-Uncensored-SuperHOT-8K-GPTQ', 
               model_path='/data/models/TheBloke_Wizard-Vicuna-13B-Uncensored-SuperHOT-8K-GPTQ', 
+              #model_path='/data/models/TheBloke_Wizard-Vicuna-30B-Uncensored-GPTQ',
               lora_path = None,
-              temperature = .1,
-              #top_p = .5,
+              temperature = .5,
+              #top_p = 1,
               beams = 1, 
               beam_length = 40, 
               stop_sequences=["Human:", "User:", "AI:", "Observation:"],
@@ -115,7 +122,7 @@ HUMAN: {input} ASSISTANT:
 
 # prompt_template = PromptTemplate(input_variables=["input", "tools", "agent_scratchpad", "tool_names"], template=template)
 
-tools = load_tools(["wikipedia", "llm-math"], llm=llm)
+tools = load_tools(["wikipedia", "wolfram-alpha"], llm=llm)
 
 prompt = CustomPromptTemplate(
     template=the_template,
@@ -151,4 +158,4 @@ agent_executor = AgentExecutor.from_agent_and_tools(
     agent=agent, tools=tools, verbose=True
 )
 
-agent_executor.run("Distance from Sydney to Melbourne")
+agent_executor.run("What is the distance in km from Sydney to Tokyo multiplied by 2?")

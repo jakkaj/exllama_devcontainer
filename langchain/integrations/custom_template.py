@@ -22,7 +22,9 @@ Rememeber, Action is just the tool name and input is just the input for example:
 ```Action: Wikipedia
 Action Input: The thing you want to look for``` 
 
-Remember, you *must* only use the format above.
+Remember, you *only* have access to *these* tools->[{tool_names}]
+
+Remember to use the format, form example remember to use "Final Answer: " before your final answer.
 
 Begin!
 

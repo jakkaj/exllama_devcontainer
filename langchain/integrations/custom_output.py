@@ -25,7 +25,16 @@ class CustomOutputParser(AgentOutputParser):
         regex = r"Action\s*\d*\s*:(.*?)\nAction\s*\d*\s*Input\s*\d*\s*:[\s]*(.*)"
         match = re.search(regex, llm_output, re.DOTALL)
         if not match:
-            raise ValueError(f"Could not parse LLM output: `{llm_output}`")
+            # make an allownace for the dumber small models
+            return AgentFinish(
+                # Return values is generally always a dictionary with a single `output` key
+                # It is not recommended to try anything else at the moment :)
+                return_values={"output": llm_output.strip()},
+                log=llm_output,
+            )
+            
+            #raise ValueError(f"Could not parse LLM output: `{llm_output}`")
+        
         action = match.group(1).strip()
         action_input = match.group(2)
         # Return the action and action input
