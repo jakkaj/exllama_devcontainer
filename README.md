@@ -9,7 +9,7 @@ Basically it pulls [exllama code](https://github.com/turboderp/exllama) from git
 
 You can run it in a sub container as an API or you can run it in the dev container directly. 
 
-## Getting started
+## Getting Started
 
 Create `/data/models` on your local system, or edit the mount path in `./.devcontainer/devcontainer.json`. It's towards the bottom in the mounts section. 
 
@@ -21,10 +21,19 @@ Create `/data/models` on your local system, or edit the mount path in `./.devcon
 	]
 ```
 
-## NOTE RE GPU
+## Download a model
+
+Grab the GTPQ models from Hugging face e.g something like [https://huggingface.co/TheBloke/Nous-Hermes-13B-GPTQ](https://huggingface.co/TheBloke/Nous-Hermes-13B-GPTQ) works well. 
+
+```sh
+git lfs install
+git clone https://huggingface.co/TheBloke/Nous-Hermes-13B-GPTQ
+```
+
+## Note on GPT Requirement
 This dev container requires a cuda capable GPU. 
 
-### To run the api docker container
+### Run API in Docker
 
 Edit `./docker/.env` and change the local path to your model. This will be loaded by the API. 
 
@@ -47,18 +56,22 @@ It supports the same endpoints, `infer_precise`, `infer_creative` and `infer_sph
 
 There is a file in `rest/test_api.rest` that will let you test the api from in VS Code once its up and running
 
-## To run locally
+## Run Locally
 
-The dev container is built with everything you need to run locally. 
+The dev container is built with everything you need to run locally.
 
-#### Langchain examples
+- Pull the repo
+- Open in the dev container
+- Run `make prepare`
+
+#### Langchain Examples
 
 1. Open `langchain/langchain_sample.py`. Edit your model path around line 60 e.g. `model_path='/data/models/TheBloke_Nous-Hermes-13B-GPTQ'`. 
 2. On the VS Code debug tab, select `Langchain Sample`. Press F5.
 
 
 
-## Other stuff...
+## Other Stuff...
 Of course you can load the exists exllama samples, such as the web etc from this container without any extra work!
 
 Run other make commands such as `build_docker_web` followed by `launch_docker_web` or `launch_text_bot`. Before doing this edit `.env` under the exllama folder. 
