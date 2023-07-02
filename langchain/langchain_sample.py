@@ -69,7 +69,7 @@ llm = Exllama(streaming = True,
               verbose = False,
               max_seq_len = 4096,
               #alpha_value = 4.0, #For use with any models
-              compress_pos_emb = 2.0, #For use with superhot
+              compress_pos_emb = 2, #For use with superhot
               #set_auto_map = "3, 2" #Gpu split, this will split 3gigs/2gigs.
               
               )
@@ -122,7 +122,7 @@ HUMAN: {input} ASSISTANT:
 
 # prompt_template = PromptTemplate(input_variables=["input", "tools", "agent_scratchpad", "tool_names"], template=template)
 
-tools = load_tools(["wikipedia", "wolfram-alpha"], llm=llm)
+tools = load_tools(["wikipedia", "llm-math", "wolfram-alpha"], llm=llm)
 
 prompt = CustomPromptTemplate(
     template=the_template,
@@ -158,4 +158,6 @@ agent_executor = AgentExecutor.from_agent_and_tools(
     agent=agent, tools=tools, verbose=True
 )
 
-agent_executor.run("What is the distance in km from Sydney to Tokyo multiplied by 2?")
+#agent_executor.run("What is the distance in km from Sydney to Tokyo?")
+
+agent_executor.run("What is bendigo bank?")
