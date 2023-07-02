@@ -50,11 +50,11 @@ from langchain.memory import ConversationTokenBufferMemory
 
 handler = BasicStreamingHandler()
 llm = Exllama(streaming = True,
-              model_path='/data/models/TheBloke_WizardLM-33B-V1.0-Uncensored-SuperHOT-8K-GPTQ', 
-              #model_path='/data/models/TheBloke_Wizard-Vicuna-13B-Uncensored-SuperHOT-8K-GPTQ', 
+              #model_path='/data/models/TheBloke_WizardLM-33B-V1.0-Uncensored-SuperHOT-8K-GPTQ', 
+              model_path='/data/models/TheBloke_Wizard-Vicuna-13B-Uncensored-SuperHOT-8K-GPTQ', 
               lora_path = None,
-              temperature = 0.2,
-              #top_p = 1.0,
+              temperature = .1,
+              #top_p = .5,
               beams = 1, 
               beam_length = 40, 
               stop_sequences=["Human:", "User:", "AI:", "Observation:"],
@@ -151,4 +151,4 @@ agent_executor = AgentExecutor.from_agent_and_tools(
     agent=agent, tools=tools, verbose=True
 )
 
-agent_executor.run("In which state is Bendigo?")
+agent_executor.run("Distance from Sydney to Melbourne")
