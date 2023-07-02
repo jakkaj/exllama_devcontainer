@@ -21,7 +21,7 @@ Create `/data/models` on your local system, or edit the mount path in `./.devcon
 	]
 ```
 
-## Download a model
+## Download a Model
 
 Grab the GTPQ models from Hugging face e.g something like [https://huggingface.co/TheBloke/Nous-Hermes-13B-GPTQ](https://huggingface.co/TheBloke/Nous-Hermes-13B-GPTQ) works well. 
 
