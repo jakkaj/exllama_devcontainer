@@ -57,8 +57,9 @@ load_dotenv()
 handler = BasicStreamingHandler()
 llm = Exllama(streaming = True,
               #model_path='/data/models/TheBloke_WizardLM-33B-V1.0-Uncensored-SuperHOT-8K-GPTQ', 
-              model_path='/data/models/TheBloke_Wizard-Vicuna-13B-Uncensored-SuperHOT-8K-GPTQ', 
+              #model_path='/data/models/TheBloke_Wizard-Vicuna-13B-Uncensored-SuperHOT-8K-GPTQ', 
               #model_path='/data/models/TheBloke_Wizard-Vicuna-30B-Uncensored-GPTQ',
+              model_path='/data/models/TheBloke_Nous-Hermes-13B-GPTQ',
               lora_path = None,
               temperature = .5,
               #top_p = 1,
@@ -67,9 +68,9 @@ llm = Exllama(streaming = True,
               stop_sequences=["Human:", "User:", "AI:", "Observation:"],
               callbacks=[handler],
               verbose = False,
-              max_seq_len = 4096,
+              max_seq_len = 2048,
               #alpha_value = 4.0, #For use with any models
-              compress_pos_emb = 2, #For use with superhot
+              #compress_pos_emb = 2, #For use with superhot
               #set_auto_map = "3, 2" #Gpu split, this will split 3gigs/2gigs.
               
               )
@@ -160,4 +161,4 @@ agent_executor = AgentExecutor.from_agent_and_tools(
 
 #agent_executor.run("What is the distance in km from Sydney to Tokyo?")
 
-agent_executor.run("What is bendigo bank?")
+agent_executor.run(input="What is bendigo bank?", max_tokens=2048)

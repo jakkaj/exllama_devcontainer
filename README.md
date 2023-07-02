@@ -1,9 +1,30 @@
-# exllama_devcontainer
+# Exllama wrappers
+
+
+
+## exllama_devcontainer
 A nice way to fire up exllama based models in a little api in docker. 
 
 Basically it pulls [exllama code](https://github.com/turboderp/exllama) from github and then wraps it up in a little container. Exllama has docker support already, this just makes a new container that is a little api. 
 
+You can run it in a sub container as an API or you can run it in the dev container directly. 
+
 ## Getting started
+
+Create `/data/models` on your local system, or edit the mount path in `./.devcontainer/devcontainer.json`. It's towards the bottom in the mounts section. 
+
+```json
+"mounts": [
+		// map host ssh to container
+		"source=${env:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+		"source=/data,target=/data,type=bind,consistency=consistent"
+	]
+```
+
+## NOTE RE GPU
+This dev container requires a cuda capable GPU. 
+
+### To run the api docker container
 
 Edit `./docker/.env` and change the local path to your model. This will be loaded by the API. 
 
@@ -25,6 +46,17 @@ The api is based on this [exllama sample](https://github.com/turboderp/exllama/b
 It supports the same endpoints, `infer_precise`, `infer_creative` and `infer_sphinx`.
 
 There is a file in `rest/test_api.rest` that will let you test the api from in VS Code once its up and running
+
+## To run locally
+
+The dev container is built with everything you need to run locally. 
+
+#### Langchain examples
+
+1. Open `langchain/langchain_sample.py`. Edit your model path around line 60 e.g. `model_path='/data/models/TheBloke_Nous-Hermes-13B-GPTQ'`. 
+2. On the VS Code debug tab, select `Langchain Sample`. Press F5.
+
+
 
 ## Other stuff...
 Of course you can load the exists exllama samples, such as the web etc from this container without any extra work!

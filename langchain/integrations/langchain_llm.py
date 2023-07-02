@@ -230,7 +230,7 @@ class Exllama(LLM):
         stop: Optional[List[str]] = None,
         run_manager: Optional[CallbackManagerForLLMRun] = None,
     ) -> str:
-        print(prompt)
+        print(f"----------\n{prompt}\n----------")
         config = self.config
         generator = self.generator
         beam_search = self.beams >= 1 and self.beam_length >= 1
