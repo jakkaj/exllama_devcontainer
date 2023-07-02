@@ -18,7 +18,8 @@
             "request": "launch",
             "program": "langchain/langchain_sample.py",
             "console": "integratedTerminal",
-            "justMyCode": false,            
+            "justMyCode": false,
+            "env": {"PYTHONPATH": "${workspaceFolder}${pathSeparator}${env:PYTHONPATH}"}           
         },
     ]
 }
