@@ -21,5 +21,14 @@
             "justMyCode": false,
             "env": {"PYTHONPATH": "${workspaceFolder}${pathSeparator}${env:PYTHONPATH}"}           
         },
+        {
+            "name": "Docs Sample",
+            "type": "python",
+            "request": "launch",
+            "program": "langchain/docs_example.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {"PYTHONPATH": "${workspaceFolder}${pathSeparator}${env:PYTHONPATH}"}           
+        },
     ]
 }

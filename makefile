@@ -1,6 +1,7 @@
 prepare:
 	git submodule init
 	git submodule update --remote
+	sudo python3 ./llama_downloader.py
 
 build_exllama_service_container:
 	cd exllama && docker build -t exllama-web:build .

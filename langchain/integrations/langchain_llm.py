@@ -317,12 +317,12 @@ class BasicStreamingHandler(BaseCallbackHandler):
         """Run when LLM starts running."""
         self.logfunc(prompts[0])
         self.logfunc(f"\nLength: {len(prompts[0])}")
-        #self.logfunc(f"Buffer: {self.chain.llm.get_num_tokens_from_messages(self.chain.memory.buffer)}\n")
+        #self.logfunc(f"Buffer: {self.llm.get_num_tokens_from_messages(self.chain.memory.buffer)}\n")
         self.start_time = time.time()
 
     def on_llm_new_token(self, token: str, **kwargs) -> None:
         print(token, end="", flush=True)
-        self.token_count += self.chain.llm.generator.tokenizer.num_tokens(token)
+        self.token_count += self.llm.generator.tokenizer.num_tokens(token)
         
     def on_llm_end(self, response, **kwargs) -> None:
         end_time = time.time()
@@ -332,8 +332,8 @@ class BasicStreamingHandler(BaseCallbackHandler):
         self.logfunc(f"Tokens per second: {tokens_per_second}")
         self.token_count = 0
 
-    def set_chain(self, chain):
-        self.chain = chain
+    def set_llm(self, llm):
+        self.llm = llm
         self.token_count = 0
-        self.logfunc = self.chain.llm.logfunc
+        self.logfunc = self.llm.logfunc
 
